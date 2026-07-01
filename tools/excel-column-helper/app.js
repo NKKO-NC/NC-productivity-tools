@@ -4,6 +4,12 @@ const excelColumnHelperTranslations = {
     brand: "Excel 工具",
     backHome: "回到首頁",
     installPwa: "安裝 App",
+    themeToggleAria: "切換主題",
+    themeTitle: "主題",
+    themeSunset: "預設橘",
+    themeOcean: "海藍",
+    themeMeadow: "草綠",
+    themeRainbow: "彩虹",
     eyebrow: "Excel 小工具",
     title: "Excel 相對欄位對照",
     intro: "輸入起始與結束欄位，例如 <strong>W</strong> 到 <strong>Z</strong>，工具會回傳範圍內從 1 開始的相對序號。",
@@ -23,6 +29,12 @@ const excelColumnHelperTranslations = {
     brand: "Excel Tool",
     backHome: "Back Home",
     installPwa: "Install App",
+    themeToggleAria: "Switch theme",
+    themeTitle: "Theme",
+    themeSunset: "Sunset",
+    themeOcean: "Ocean",
+    themeMeadow: "Meadow",
+    themeRainbow: "Rainbow",
     eyebrow: "Excel Utility",
     title: "Excel Relative Column Helper",
     intro: "Enter a start and end column, such as <strong>W</strong> to <strong>Z</strong>, and the tool will return relative indexes starting from 1 within that range.",
@@ -39,10 +51,19 @@ const excelColumnHelperTranslations = {
   }
 };
 
+const THEME_STORAGE_KEY = "excel-column-helper-theme";
+const THEMES = {
+  sunset: { color: "#b96a1d" },
+  ocean: { color: "#1f7ea8" },
+  meadow: { color: "#4f8a3c" },
+  rainbow: { color: "#d94b4b" }
+};
+
 const state = {
   currentLanguage: "zh-TW",
   lastRange: null,
-  lastMessageKey: ""
+  lastMessageKey: "",
+  currentTheme: "sunset"
 };
 
 const startInput = document.getElementById("start");
@@ -51,7 +72,15 @@ const messageNode = document.getElementById("message");
 const resultNode = document.getElementById("result");
 const generateButton = document.getElementById("generateButton");
 const resetButton = document.getElementById("resetButton");
+const themeSwitcher = document.getElementById("themeSwitcher");
+const themeTrigger = document.getElementById("themeTrigger");
+const themePanel = document.getElementById("themePanel");
+const themeButtons = Array.from(document.querySelectorAll("[data-theme-option]"));
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const MAX_VALUE = lettersToNumber("xfd");
+const MOBILE_BREAKPOINT = 520;
+const TABLET_BREAKPOINT = 760;
+const DESKTOP_BREAKPOINT = 1080;
 
 function lettersToNumber(value) {
   return value
@@ -94,16 +123,78 @@ function setMessage(copyKey) {
   messageNode.textContent = copyKey ? getCopy(copyKey) : "";
 }
 
+function getInitialTheme() {
+  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+  if (storedTheme && THEMES[storedTheme]) {
+    return storedTheme;
+  }
+
+  return "sunset";
+}
+
+function updateThemeButtons() {
+  themeButtons.forEach(function (button) {
+    const isActive = button.dataset.themeOption === state.currentTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function applyTheme(themeName) {
+  const nextTheme = THEMES[themeName] ? themeName : "sunset";
+  state.currentTheme = nextTheme;
+  document.body.dataset.theme = nextTheme;
+
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", THEMES[nextTheme].color);
+  }
+
+  updateThemeButtons();
+}
+
+function setTheme(themeName) {
+  applyTheme(themeName);
+  window.localStorage.setItem(THEME_STORAGE_KEY, state.currentTheme);
+}
+
+function setThemePanelOpen(isOpen) {
+  themeSwitcher.dataset.open = String(isOpen);
+  themeTrigger.setAttribute("aria-expanded", String(isOpen));
+  themePanel.hidden = !isOpen;
+}
+
+function getChunkSize() {
+  const width = window.innerWidth;
+
+  if (width < MOBILE_BREAKPOINT) {
+    return 4;
+  }
+
+  if (width < TABLET_BREAKPOINT) {
+    return 5;
+  }
+
+  if (width < DESKTOP_BREAKPOINT) {
+    return 8;
+  }
+
+  return 10;
+}
+
 function renderRange(startNumber, endNumber) {
   resultNode.innerHTML = "";
+  const chunkSize = getChunkSize();
+
+  resultNode.style.setProperty("--result-columns", String(chunkSize));
 
   const letters = [];
   for (let current = startNumber; current <= endNumber; current += 1) {
     letters.push(numberToLetters(current));
   }
 
-  for (let index = 0; index < letters.length; index += 10) {
-    const chunk = letters.slice(index, index + 10);
+  for (let index = 0; index < letters.length; index += chunkSize) {
+    const chunk = letters.slice(index, index + chunkSize);
     const block = document.createElement("section");
     block.className = "result-block";
 
@@ -177,7 +268,39 @@ function handleEnter(event) {
   }
 }
 
+function rerenderForViewport() {
+  if (state.lastRange) {
+    renderRange(state.lastRange.startNumber, state.lastRange.endNumber);
+  }
+}
+
+function handleThemeTriggerClick() {
+  const isOpen = themeSwitcher.dataset.open === "true";
+  setThemePanelOpen(!isOpen);
+}
+
+function handleThemeOptionClick(event) {
+  const nextTheme = event.currentTarget.dataset.themeOption;
+  setTheme(nextTheme);
+  setThemePanelOpen(false);
+}
+
+function handleDocumentClick(event) {
+  if (!themeSwitcher.contains(event.target)) {
+    setThemePanelOpen(false);
+  }
+}
+
+function handleDocumentKeydown(event) {
+  if (event.key === "Escape") {
+    setThemePanelOpen(false);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", function () {
+  applyTheme(getInitialTheme());
+  setThemePanelOpen(false);
+
   window.setupI18n(excelColumnHelperTranslations, {
     onLanguageChange: function (language) {
       state.currentLanguage = language;
@@ -194,4 +317,11 @@ window.addEventListener("DOMContentLoaded", function () {
   resetButton.addEventListener("click", resetTool);
   startInput.addEventListener("keydown", handleEnter);
   endInput.addEventListener("keydown", handleEnter);
+  themeTrigger.addEventListener("click", handleThemeTriggerClick);
+  themeButtons.forEach(function (button) {
+    button.addEventListener("click", handleThemeOptionClick);
+  });
+  document.addEventListener("click", handleDocumentClick);
+  document.addEventListener("keydown", handleDocumentKeydown);
+  window.addEventListener("resize", rerenderForViewport);
 });
