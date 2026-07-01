@@ -543,6 +543,54 @@ h3 {
   margin-top: 20px;
 }
 
+.quick-lookup {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  background: var(--card-bg);
+}
+
+.quick-lookup-head {
+  display: grid;
+  gap: 6px;
+}
+
+.quick-lookup-head h2 {
+  font-size: 1.05rem;
+}
+
+.quick-lookup-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.quick-lookup-result {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--accent-strong);
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  font-weight: 700;
+  text-align: center;
+}
+
+.quick-lookup-result[data-state="miss"] {
+  color: var(--message);
+}
+
+.quick-lookup-result[data-state="hit"] {
+  border-style: solid;
+}
+
 .result-block {
   display: grid;
   gap: 10px;
@@ -692,6 +740,10 @@ body[data-theme="rainbow"] .result-block:nth-child(6n + 6) .cell.num {
   .tool-actions .button,
   .tool-actions .link-button {
     flex: 1 1 160px;
+  }
+
+  .quick-lookup-form {
+    grid-template-columns: 1fr;
   }
 
   .theme-panel {

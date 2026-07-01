@@ -13,6 +13,11 @@ const excelColumnHelperTranslations = {
     eyebrow: "Excel 小工具",
     title: "Excel 相對欄位對照",
     intro: "輸入起始與結束欄位，例如 <strong>W</strong> 到 <strong>Z</strong>，工具會回傳範圍內從 1 開始的相對序號。",
+    quickLookupTitle: "速查",
+    quickLookupIntro: "輸入單一欄位，直接回傳目前對照表中的相對編號；若不在範圍內，會顯示不在範圍內。",
+    quickLookupLabel: "查詢欄位",
+    quickLookupPlaceholder: "例如 Y",
+    quickLookupAction: "速查編號",
     startLabel: "起始欄位",
     endLabel: "結束欄位",
     startPlaceholder: "例如 W",
@@ -22,7 +27,8 @@ const excelColumnHelperTranslations = {
     footnote: "支援 A 到 XFD，結果會依你輸入的起始欄位從 1 開始計算。",
     errorFormat: "請輸入 1 到 3 個英文字母。",
     errorLimit: "Excel 欄位上限是 XFD。",
-    errorOrder: "起始欄位不能大於結束欄位。"
+    errorOrder: "起始欄位不能大於結束欄位。",
+    quickLookupOutOfRange: "不在範圍內"
   },
   en: {
     pageTitle: "Excel Relative Column Helper",
@@ -38,6 +44,11 @@ const excelColumnHelperTranslations = {
     eyebrow: "Excel Utility",
     title: "Excel Relative Column Helper",
     intro: "Enter a start and end column, such as <strong>W</strong> to <strong>Z</strong>, and the tool will return relative indexes starting from 1 within that range.",
+    quickLookupTitle: "Quick Lookup",
+    quickLookupIntro: "Enter a single column to return its relative index in the current table, or show that it is out of range.",
+    quickLookupLabel: "Lookup Column",
+    quickLookupPlaceholder: "For example Y",
+    quickLookupAction: "Find Index",
     startLabel: "Start Column",
     endLabel: "End Column",
     startPlaceholder: "For example W",
@@ -47,7 +58,8 @@ const excelColumnHelperTranslations = {
     footnote: "Supports A to XFD, and always counts from 1 based on the start column you enter.",
     errorFormat: "Please enter 1 to 3 letters.",
     errorLimit: "The maximum Excel column is XFD.",
-    errorOrder: "The start column cannot be after the end column."
+    errorOrder: "The start column cannot be after the end column.",
+    quickLookupOutOfRange: "Out of range"
   }
 };
 
@@ -63,13 +75,18 @@ const state = {
   currentLanguage: "zh-TW",
   lastRange: null,
   lastMessageKey: "",
-  currentTheme: "sunset"
+  currentTheme: "sunset",
+  quickLookupResult: null
 };
 
 const startInput = document.getElementById("start");
 const endInput = document.getElementById("end");
 const messageNode = document.getElementById("message");
 const resultNode = document.getElementById("result");
+const quickLookupNode = document.getElementById("quickLookup");
+const quickLookupInput = document.getElementById("lookup");
+const quickLookupResultNode = document.getElementById("quickLookupResult");
+const lookupButton = document.getElementById("lookupButton");
 const generateButton = document.getElementById("generateButton");
 const resetButton = document.getElementById("resetButton");
 const themeSwitcher = document.getElementById("themeSwitcher");
@@ -116,6 +133,38 @@ function clearOutput() {
   state.lastMessageKey = "";
   messageNode.textContent = "";
   resultNode.innerHTML = "";
+}
+
+function clearQuickLookupResult() {
+  state.quickLookupResult = null;
+  quickLookupResultNode.textContent = "";
+  quickLookupResultNode.dataset.state = "";
+}
+
+function renderQuickLookupResult() {
+  if (!state.quickLookupResult) {
+    quickLookupResultNode.textContent = "";
+    quickLookupResultNode.dataset.state = "";
+    return;
+  }
+
+  if (state.quickLookupResult.kind === "index") {
+    quickLookupResultNode.textContent = String(state.quickLookupResult.value);
+    quickLookupResultNode.dataset.state = "hit";
+    return;
+  }
+
+  quickLookupResultNode.textContent = getCopy(state.quickLookupResult.key);
+  quickLookupResultNode.dataset.state = "miss";
+}
+
+function setQuickLookupResult(result) {
+  state.quickLookupResult = result;
+  renderQuickLookupResult();
+}
+
+function setQuickLookupVisible(isVisible) {
+  quickLookupNode.hidden = !isVisible;
 }
 
 function setMessage(copyKey) {
@@ -252,13 +301,24 @@ function generateTable() {
 
   state.lastRange = { startNumber, endNumber };
   renderRange(startNumber, endNumber);
+  setQuickLookupVisible(true);
+
+  if (quickLookupInput.value.trim()) {
+    lookupColumn();
+    return;
+  }
+
+  clearQuickLookupResult();
 }
 
 function resetTool() {
   startInput.value = "";
   endInput.value = "";
+  quickLookupInput.value = "";
   state.lastRange = null;
   clearOutput();
+  clearQuickLookupResult();
+  setQuickLookupVisible(false);
   startInput.focus();
 }
 
@@ -266,6 +326,42 @@ function handleEnter(event) {
   if (event.key === "Enter") {
     generateTable();
   }
+}
+
+function handleLookupEnter(event) {
+  if (event.key === "Enter") {
+    lookupColumn();
+  }
+}
+
+function lookupColumn() {
+  const lookupValue = quickLookupInput.value.trim();
+
+  if (!state.lastRange) {
+    return;
+  }
+
+  if (!isValidLetters(lookupValue)) {
+    setQuickLookupResult({ kind: "copy", key: "errorFormat" });
+    return;
+  }
+
+  const lookupNumber = lettersToNumber(lookupValue);
+
+  if (lookupNumber > MAX_VALUE) {
+    setQuickLookupResult({ kind: "copy", key: "errorLimit" });
+    return;
+  }
+
+  if (lookupNumber < state.lastRange.startNumber || lookupNumber > state.lastRange.endNumber) {
+    setQuickLookupResult({ kind: "copy", key: "quickLookupOutOfRange" });
+    return;
+  }
+
+  setQuickLookupResult({
+    kind: "index",
+    value: lookupNumber - state.lastRange.startNumber + 1
+  });
 }
 
 function rerenderForViewport() {
@@ -310,13 +406,16 @@ window.addEventListener("DOMContentLoaded", function () {
       }
 
       setMessage(state.lastMessageKey);
+      renderQuickLookupResult();
     }
   });
 
   generateButton.addEventListener("click", generateTable);
   resetButton.addEventListener("click", resetTool);
+  lookupButton.addEventListener("click", lookupColumn);
   startInput.addEventListener("keydown", handleEnter);
   endInput.addEventListener("keydown", handleEnter);
+  quickLookupInput.addEventListener("keydown", handleLookupEnter);
   themeTrigger.addEventListener("click", handleThemeTriggerClick);
   themeButtons.forEach(function (button) {
     button.addEventListener("click", handleThemeOptionClick);
@@ -324,4 +423,5 @@ window.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", handleDocumentClick);
   document.addEventListener("keydown", handleDocumentKeydown);
   window.addEventListener("resize", rerenderForViewport);
+  setQuickLookupVisible(false);
 });
