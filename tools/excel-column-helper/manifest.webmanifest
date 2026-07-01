@@ -1,0 +1,21 @@
+{
+  "name": "Excel 相對欄位對照",
+  "short_name": "Excel 欄位對照",
+  "description": "把 Excel 欄位區間轉成從 1 開始的相對序號。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffdf8",
+  "theme_color": "#b96a1d",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "../../assets/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

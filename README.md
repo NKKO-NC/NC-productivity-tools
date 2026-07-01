@@ -1,71 +1,27 @@
-# NC 生產力工具站 / NC Productivity Tools
+# NC 生產力工具站
 
-雙語公開倉庫，專門收錄小而實用的生產力工具。  
-A bilingual public repo for small, practical productivity tools.
+一個收錄輕量實用工具的公開倉庫，主打直接開啟、快速使用，以及手機與桌機都能安裝成 PWA。
 
-## 專案定位 / Project Focus
+NC Productivity Tools is a public collection of lightweight utilities designed for quick browser use and optional PWA installation.
 
-- 以工具為核心，而不是以技術分類為核心
-- 每個工具都能獨立維護、獨立擴充
-- 首頁負責功能導讀，工具資料夾負責實作與說明
-- 中文主體、英文對照，避免 repo 外觀過度英文化
-- 以 GitHub Pages + PWA 為第一階段發布方式
+## 目前工具
 
-## 發布方式 / Deployment
+### Excel 相對欄位對照
 
-- `GitHub Pages`：公開靜態站點入口
-- `PWA`：可安裝、可離線快取、適合輕量工具
+- 功能：把欄位區間轉成從 1 開始的相對序號
+- 範例：`W ~ Z` 會得到 `1 ~ 4`
+- 入口：[tools/excel-column-helper/](./tools/excel-column-helper/)
+- 標籤：`#PWA` `#HTML` `#VanillaJS` `#Excel` `#Offline`
 
-## 功能目錄 / Tool Directory
+## 使用方式
 
-- `Excel 欄位對照工具 / Excel Column Helper`
-  連結：`tools/excel-column-helper/`
-  標籤：`#PWA #HTML #VanillaJS #Excel #Offline`
-  用途：Excel 欄位字母與序號快速對照
+- 直接在瀏覽器開啟工具即可使用
+- Android / 桌面 Chrome 可直接安裝成 App
+- iPhone / iPad 可使用 Safari「加入主畫面」
 
-## 結構 / Structure
+## 授權
 
-```text
-assets/
-  css/                  共用樣式 / Shared styles
-  js/                   共用腳本 / Shared scripts
-docs/
-  repo-structure.md     倉庫規範 / Repo notes
-tools/
-  excel-column-helper/  第一個正式工具 / First shipped tool
-index.html              首頁導覽 / Homepage
-```
+本專案目前採自訂非商用授權。  
+商業使用、商業整合、轉售、代管服務或其他商用情境，請先洽談授權。
 
-## 第一個工具 / First Tool
-
-- `Excel Column Helper / Excel 欄位對照工具`
-  把 Excel 欄位字母，例如 `A`、`Z`、`XFD`，轉成對應序號並展開區間。  
-  Convert Excel column letters such as `A`, `Z`, or `XFD` into numeric positions and expand a range.
-
-## 後續擴充 / Next Step
-
-新增工具時，最少維持這組結構：
-
-- `tools/<tool-slug>/index.html`
-- `tools/<tool-slug>/app.js`
-- `tools/<tool-slug>/README.md`
-
-並在首頁補上一張工具卡，讓使用者能依功能而不是依技術來源找到它。  
-Then add one homepage card so users can discover the tool by function rather than implementation detail.
-
-## 標籤用途 / Tag Semantics
-
-- `#PWA`：可安裝、可離線，但仍受瀏覽器沙箱限制
-- `#HTML`：主要由靜態頁面構成，適合 GitHub Pages
-- `#VanillaJS`：不依賴大型框架，方便維護與快速載入
-- `#Offline`：已加入 service worker 快取
-
-## 技術邊界 / Platform Limits
-
-如果未來工具需要以下能力，就要及早評估是否繼續放在 GitHub Pages / PWA：
-
-- 原生多視窗或浮動視窗
-- 深度本機檔案系統權限
-- 背景常駐工作
-- 系統層通知整合以外的桌面功能
-- 高度即時同步或長連線桌面體驗
+詳細條款請見 [LICENSE](./LICENSE)。

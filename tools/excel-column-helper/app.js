@@ -1,39 +1,41 @@
 const excelColumnHelperTranslations = {
   "zh-TW": {
-    pageTitle: "Excel 欄位對照工具 / Excel Column Helper",
-    brand: "Excel 工具 / Excel Tool",
-    backHome: "回到首頁 / Back Home",
-    eyebrow: "Excel 小工具 / Excel Utility",
-    title: "Excel 欄位對照工具 / Excel Column Helper",
-    intro: "輸入起始與結束欄位，例如 <strong>A</strong> 到 <strong>AC</strong>，工具會展開欄位名稱與欄位序號。<br />Enter a start and end column, such as <strong>A</strong> to <strong>AC</strong>, and the tool will expand the labels and numeric positions.",
-    startLabel: "起始欄位 / Start Column",
-    endLabel: "結束欄位 / End Column",
-    startPlaceholder: "例如 A / For example A",
-    endPlaceholder: "例如 AC / For example AC",
-    generate: "產生對照表 / Generate Table",
-    reset: "重設 / Reset",
-    footnote: "支援 Excel 最大欄位 XFD，並以每列 10 欄顯示結果。 / Supports Excel columns up to XFD and shows results in groups of 10.",
-    errorFormat: "請輸入 1 到 3 個英文字母。 / Please enter 1 to 3 letters.",
-    errorLimit: "Excel 欄位上限是 XFD。 / The maximum Excel column is XFD.",
-    errorOrder: "起始欄位不能大於結束欄位。 / The start column cannot be after the end column."
+    pageTitle: "Excel 相對欄位對照",
+    brand: "Excel 工具",
+    backHome: "回到首頁",
+    installPwa: "安裝 App",
+    eyebrow: "Excel 小工具",
+    title: "Excel 相對欄位對照",
+    intro: "輸入起始與結束欄位，例如 <strong>W</strong> 到 <strong>Z</strong>，工具會回傳範圍內從 1 開始的相對序號。",
+    startLabel: "起始欄位",
+    endLabel: "結束欄位",
+    startPlaceholder: "例如 W",
+    endPlaceholder: "例如 Z",
+    generate: "產生對照表",
+    reset: "重設",
+    footnote: "支援 A 到 XFD，結果會依你輸入的起始欄位從 1 開始計算。",
+    errorFormat: "請輸入 1 到 3 個英文字母。",
+    errorLimit: "Excel 欄位上限是 XFD。",
+    errorOrder: "起始欄位不能大於結束欄位。"
   },
   en: {
-    pageTitle: "Excel Column Helper / Excel 欄位對照工具",
-    brand: "Excel Tool / Excel 工具",
-    backHome: "Back Home / 回到首頁",
-    eyebrow: "Excel Utility / Excel 小工具",
-    title: "Excel Column Helper / Excel 欄位對照工具",
-    intro: "Enter a start and end column, such as <strong>A</strong> to <strong>AC</strong>, and the tool will expand the labels and numeric positions.<br />輸入起始與結束欄位，例如 <strong>A</strong> 到 <strong>AC</strong>，工具會展開欄位名稱與欄位序號。",
-    startLabel: "Start Column / 起始欄位",
-    endLabel: "End Column / 結束欄位",
-    startPlaceholder: "For example A / 例如 A",
-    endPlaceholder: "For example AC / 例如 AC",
-    generate: "Generate Table / 產生對照表",
-    reset: "Reset / 重設",
-    footnote: "Supports Excel columns up to XFD and shows results in groups of 10. / 支援 Excel 最大欄位 XFD，並以每列 10 欄顯示結果。",
-    errorFormat: "Please enter 1 to 3 letters. / 請輸入 1 到 3 個英文字母。",
-    errorLimit: "The maximum Excel column is XFD. / Excel 欄位上限是 XFD。",
-    errorOrder: "The start column cannot be after the end column. / 起始欄位不能大於結束欄位。"
+    pageTitle: "Excel Relative Column Helper",
+    brand: "Excel Tool",
+    backHome: "Back Home",
+    installPwa: "Install App",
+    eyebrow: "Excel Utility",
+    title: "Excel Relative Column Helper",
+    intro: "Enter a start and end column, such as <strong>W</strong> to <strong>Z</strong>, and the tool will return relative indexes starting from 1 within that range.",
+    startLabel: "Start Column",
+    endLabel: "End Column",
+    startPlaceholder: "For example W",
+    endPlaceholder: "For example Z",
+    generate: "Generate Table",
+    reset: "Reset",
+    footnote: "Supports A to XFD, and always counts from 1 based on the start column you enter.",
+    errorFormat: "Please enter 1 to 3 letters.",
+    errorLimit: "The maximum Excel column is XFD.",
+    errorOrder: "The start column cannot be after the end column."
   }
 };
 
@@ -118,7 +120,7 @@ function renderRange(startNumber, endNumber) {
 
       const numberCell = document.createElement("div");
       numberCell.className = "cell num";
-      numberCell.textContent = index + offset + startNumber;
+      numberCell.textContent = index + offset + 1;
 
       labelRow.appendChild(labelCell);
       numberRow.appendChild(numberCell);
