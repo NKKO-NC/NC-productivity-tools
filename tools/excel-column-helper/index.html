@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Column Helper</title>
+  <link rel="stylesheet" href="../../assets/css/site.css" />
+</head>
+<body>
+  <div class="page-shell tool-page">
+    <header class="topbar">
+      <div class="brand" data-i18n="brand">Tool / Excel</div>
+      <div class="topbar-actions">
+        <a class="link-button button-soft" href="../../index.html" data-i18n="backHome">Back home</a>
+        <button class="button button-soft" type="button" data-language-toggle>EN</button>
+      </div>
+    </header>
+
+    <main class="tool-section">
+      <div class="eyebrow" data-i18n="eyebrow">Excel utility</div>
+      <h1 data-i18n="title">Excel 欄位對照工具</h1>
+      <p class="tool-intro" data-i18n-html="intro">
+        輸入起始與結束欄位，例如 <strong>A</strong> 到 <strong>AC</strong>，工具會展開欄位名稱與欄位序號。
+      </p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="start" data-i18n="startLabel">起始欄位</label>
+          <input id="start" maxlength="3" autocomplete="off" data-i18n-placeholder="startPlaceholder" placeholder="例如 A" />
+        </div>
+        <div class="field">
+          <label for="end" data-i18n="endLabel">結束欄位</label>
+          <input id="end" maxlength="3" autocomplete="off" data-i18n-placeholder="endPlaceholder" placeholder="例如 AC" />
+        </div>
+      </div>
+
+      <div class="tool-actions">
+        <button class="button button-primary" type="button" id="generateButton" data-i18n="generate">產生對照表</button>
+        <button class="button button-soft" type="button" id="resetButton" data-i18n="reset">重設</button>
+      </div>
+
+      <div class="message" id="message" aria-live="polite"></div>
+      <div class="result" id="result"></div>
+
+      <p class="footer-note" data-i18n="footnote">
+        支援 Excel 最大欄位 XFD，並以每列 10 欄顯示結果。
+      </p>
+    </main>
+  </div>
+
+  <script src="../../assets/js/i18n.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

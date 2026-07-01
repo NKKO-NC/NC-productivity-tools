@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productivity Tools</title>
+  <link rel="stylesheet" href="./assets/css/site.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand" data-i18n="brand">Public Repo / Bilingual Tools</div>
+      <div class="topbar-actions">
+        <button class="button button-soft" type="button" data-language-toggle>EN</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow" data-i18n="eyebrow">功能導覽首頁</div>
+      <h1 data-i18n="heroTitle">把小工具做成可維護、可分享、可持續擴充的公共倉庫。</h1>
+      <p class="hero-copy" data-i18n="heroCopy">
+        這個 repo 以工具為核心，而不是以技術分類為核心。首頁負責導讀，工具資料夾負責維護，讓新增功能時不必重做整體架構。
+      </p>
+      <nav class="chip-row" aria-label="Category links">
+        <a class="chip-link" href="#excel" data-i18n="chipExcel">Excel Tools</a>
+        <a class="chip-link" href="#text" data-i18n="chipText">Text Tools</a>
+        <a class="chip-link" href="#conversion" data-i18n="chipConversion">Conversion</a>
+        <a class="chip-link" href="#roadmap" data-i18n="chipRoadmap">Roadmap</a>
+      </nav>
+    </section>
+
+    <main class="section-grid">
+      <section class="panel" id="excel">
+        <div class="section-head">
+          <div>
+            <div class="section-tag" data-i18n="excelTag">Category</div>
+            <h2 data-i18n="excelTitle">Excel Tools</h2>
+          </div>
+        </div>
+        <p class="section-copy" data-i18n="excelCopy">
+          處理欄位、公式、工作表結構與日常 Excel 操作的小工具。
+        </p>
+
+        <div class="tool-card-grid">
+          <article class="tool-card">
+            <h3 data-i18n="tool1Title">Excel 欄位對照工具</h3>
+            <p class="card-copy" data-i18n="tool1Copy">
+              輸入起訖欄位名稱，例如 A 到 AC，快速展開對照欄位與序號。
+            </p>
+            <div class="card-meta">
+              <span class="badge" data-i18n="badgeBilingual">雙語</span>
+              <span class="badge" data-i18n="badgeStatic">Static HTML</span>
+              <span class="badge" data-i18n="badgeExcel">Excel</span>
+            </div>
+            <a class="tool-link" href="./tools/excel-column-helper/" data-i18n="openTool">開啟工具</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="text">
+        <div class="section-head">
+          <div>
+            <div class="section-tag" data-i18n="textTag">Category</div>
+            <h2 data-i18n="textTitle">Text Tools</h2>
+          </div>
+        </div>
+        <p class="section-copy" data-i18n="textCopy">
+          預留給字串處理、格式整理、清理與轉換類工具。
+        </p>
+        <article class="placeholder-card">
+          <h3 data-i18n="textPlaceholderTitle">即將新增</h3>
+          <p class="card-copy" data-i18n="textPlaceholderCopy">
+            之後可以放大小寫轉換、字串切分、欄位清理等工具。
+          </p>
+        </article>
+      </section>
+
+      <section class="panel" id="conversion">
+        <div class="section-head">
+          <div>
+            <div class="section-tag" data-i18n="conversionTag">Category</div>
+            <h2 data-i18n="conversionTitle">Conversion</h2>
+          </div>
+        </div>
+        <p class="section-copy" data-i18n="conversionCopy">
+          預留給格式與資料轉換類工具，例如 CSV、JSON、代碼片段對照。
+        </p>
+        <article class="placeholder-card">
+          <h3 data-i18n="conversionPlaceholderTitle">等待第二批工具</h3>
+          <p class="card-copy" data-i18n="conversionPlaceholderCopy">
+            當工具數量成長後，可以再抽成共用 metadata 驅動首頁。
+          </p>
+        </article>
+      </section>
+
+      <section class="panel" id="roadmap">
+        <div class="section-head">
+          <div>
+            <div class="section-tag" data-i18n="roadmapTag">Repo</div>
+            <h2 data-i18n="roadmapTitle">Next Steps</h2>
+          </div>
+        </div>
+        <p class="section-copy" data-i18n="roadmapCopy">
+          目前骨架已經適合開始公開維護，下一步是持續補工具、README 與分類說明。
+        </p>
+        <div class="tool-card-grid">
+          <article class="placeholder-card">
+            <p class="card-copy" data-i18n="roadmap1">每個工具都維持自成一格的資料夾。</p>
+          </article>
+          <article class="placeholder-card">
+            <p class="card-copy" data-i18n="roadmap2">首頁持續用功能分類導覽，不暴露實作細節。</p>
+          </article>
+          <article class="placeholder-card">
+            <p class="card-copy" data-i18n="roadmap3">雙語文案維持同一套切換方式，降低後續維護成本.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./assets/js/i18n.js"></script>
+  <script src="./assets/js/home.js"></script>
+</body>
+</html>
