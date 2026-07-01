@@ -51,7 +51,7 @@
       document.title = table.pageTitle;
     }
 
-    const label = lang === "zh-TW" ? "EN" : "中文";
+    const label = table.langToggle || (lang === "zh-TW" ? "EN" : "中文");
     document.querySelectorAll("[data-language-toggle]").forEach((button) => {
       button.textContent = label;
     });

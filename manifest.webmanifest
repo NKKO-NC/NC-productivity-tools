@@ -1,0 +1,22 @@
+{
+  "name": "NC 生產力工具 / NC Productivity Tools",
+  "short_name": "NC Tools",
+  "description": "雙語小工具庫，主打 GitHub Pages 可部署、PWA 可安裝的前端工具。 / A bilingual tool library for GitHub Pages and installable PWA utilities.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffdf8",
+  "theme_color": "#b96a1d",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities", "developer tools"],
+  "icons": [
+    {
+      "src": "./assets/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
