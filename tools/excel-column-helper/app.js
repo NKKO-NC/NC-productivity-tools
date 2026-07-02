@@ -14,9 +14,9 @@ const excelColumnHelperTranslations = {
     title: "Excel 相對欄位對照",
     intro: "輸入起始與結束欄位，例如 <strong>W</strong> 到 <strong>Z</strong>，工具會回傳範圍內從 1 開始的相對序號。",
     quickLookupTitle: "速查",
-    quickLookupIntro: "輸入單一欄位，直接回傳目前對照表中的相對編號；若不在範圍內，會顯示不在範圍內。",
+    quickLookupIntro: "輸入一個或多個欄位，以空格分隔，直接回傳目前對照表中的相對編號。",
     quickLookupLabel: "查詢欄位",
-    quickLookupPlaceholder: "例如 Y",
+    quickLookupPlaceholder: "例如 W Y AA",
     quickLookupAction: "速查編號",
     startLabel: "起始欄位",
     endLabel: "結束欄位",
@@ -28,7 +28,8 @@ const excelColumnHelperTranslations = {
     errorFormat: "請輸入 1 到 3 個英文字母。",
     errorLimit: "Excel 欄位上限是 XFD。",
     errorOrder: "起始欄位不能大於結束欄位。",
-    quickLookupOutOfRange: "不在範圍內"
+    quickLookupOutOfRange: "不在範圍內",
+    quickLookupEmpty: "請先輸入要速查的欄位。"
   },
   en: {
     pageTitle: "Excel Relative Column Helper",
@@ -45,9 +46,9 @@ const excelColumnHelperTranslations = {
     title: "Excel Relative Column Helper",
     intro: "Enter a start and end column, such as <strong>W</strong> to <strong>Z</strong>, and the tool will return relative indexes starting from 1 within that range.",
     quickLookupTitle: "Quick Lookup",
-    quickLookupIntro: "Enter a single column to return its relative index in the current table, or show that it is out of range.",
+    quickLookupIntro: "Enter one or more columns separated by spaces to return their relative indexes in the current table.",
     quickLookupLabel: "Lookup Column",
-    quickLookupPlaceholder: "For example Y",
+    quickLookupPlaceholder: "For example W Y AA",
     quickLookupAction: "Find Index",
     startLabel: "Start Column",
     endLabel: "End Column",
@@ -59,7 +60,8 @@ const excelColumnHelperTranslations = {
     errorFormat: "Please enter 1 to 3 letters.",
     errorLimit: "The maximum Excel column is XFD.",
     errorOrder: "The start column cannot be after the end column.",
-    quickLookupOutOfRange: "Out of range"
+    quickLookupOutOfRange: "Out of range",
+    quickLookupEmpty: "Enter at least one column to look up."
   }
 };
 
@@ -76,7 +78,7 @@ const state = {
   lastRange: null,
   lastMessageKey: "",
   currentTheme: "sunset",
-  quickLookupResult: null
+  quickLookupResult: []
 };
 
 const startInput = document.getElementById("start");
@@ -136,26 +138,34 @@ function clearOutput() {
 }
 
 function clearQuickLookupResult() {
-  state.quickLookupResult = null;
-  quickLookupResultNode.textContent = "";
-  quickLookupResultNode.dataset.state = "";
+  state.quickLookupResult = [];
+  quickLookupResultNode.innerHTML = "";
 }
 
 function renderQuickLookupResult() {
-  if (!state.quickLookupResult) {
-    quickLookupResultNode.textContent = "";
-    quickLookupResultNode.dataset.state = "";
+  quickLookupResultNode.innerHTML = "";
+
+  if (!state.quickLookupResult.length) {
     return;
   }
 
-  if (state.quickLookupResult.kind === "index") {
-    quickLookupResultNode.textContent = String(state.quickLookupResult.value);
-    quickLookupResultNode.dataset.state = "hit";
-    return;
-  }
+  state.quickLookupResult.forEach(function (item) {
+    const card = document.createElement("article");
+    card.className = "quick-lookup-card";
+    card.dataset.state = item.kind === "index" ? "hit" : "miss";
 
-  quickLookupResultNode.textContent = getCopy(state.quickLookupResult.key);
-  quickLookupResultNode.dataset.state = "miss";
+    const label = document.createElement("div");
+    label.className = "quick-lookup-card-label";
+    label.textContent = item.token.toUpperCase();
+
+    const value = document.createElement("div");
+    value.className = "quick-lookup-card-value";
+    value.textContent = item.kind === "index" ? String(item.value) : getCopy(item.key);
+
+    card.appendChild(label);
+    card.appendChild(value);
+    quickLookupResultNode.appendChild(card);
+  });
 }
 
 function setQuickLookupResult(result) {
@@ -281,6 +291,8 @@ function generateTable() {
   if (!isValidLetters(startValue) || !isValidLetters(endValue)) {
     setMessage("errorFormat");
     state.lastRange = null;
+    clearQuickLookupResult();
+    setQuickLookupVisible(false);
     return;
   }
 
@@ -290,12 +302,16 @@ function generateTable() {
   if (startNumber > MAX_VALUE || endNumber > MAX_VALUE) {
     setMessage("errorLimit");
     state.lastRange = null;
+    clearQuickLookupResult();
+    setQuickLookupVisible(false);
     return;
   }
 
   if (startNumber > endNumber) {
     setMessage("errorOrder");
     state.lastRange = null;
+    clearQuickLookupResult();
+    setQuickLookupVisible(false);
     return;
   }
 
@@ -334,34 +350,51 @@ function handleLookupEnter(event) {
   }
 }
 
+function parseLookupTokens(value) {
+  return value
+    .replace(/\u3000/g, " ")
+    .split(/\s+/)
+    .map(function (token) {
+      return token.trim();
+    })
+    .filter(Boolean);
+}
+
 function lookupColumn() {
-  const lookupValue = quickLookupInput.value.trim();
+  const lookupTokens = parseLookupTokens(quickLookupInput.value.trim());
 
   if (!state.lastRange) {
     return;
   }
 
-  if (!isValidLetters(lookupValue)) {
-    setQuickLookupResult({ kind: "copy", key: "errorFormat" });
+  if (!lookupTokens.length) {
+    setQuickLookupResult([{ token: "-", kind: "copy", key: "quickLookupEmpty" }]);
     return;
   }
 
-  const lookupNumber = lettersToNumber(lookupValue);
+  const results = lookupTokens.map(function (token) {
+    if (!isValidLetters(token)) {
+      return { token, kind: "copy", key: "errorFormat" };
+    }
 
-  if (lookupNumber > MAX_VALUE) {
-    setQuickLookupResult({ kind: "copy", key: "errorLimit" });
-    return;
-  }
+    const lookupNumber = lettersToNumber(token);
 
-  if (lookupNumber < state.lastRange.startNumber || lookupNumber > state.lastRange.endNumber) {
-    setQuickLookupResult({ kind: "copy", key: "quickLookupOutOfRange" });
-    return;
-  }
+    if (lookupNumber > MAX_VALUE) {
+      return { token, kind: "copy", key: "errorLimit" };
+    }
 
-  setQuickLookupResult({
-    kind: "index",
-    value: lookupNumber - state.lastRange.startNumber + 1
+    if (lookupNumber < state.lastRange.startNumber || lookupNumber > state.lastRange.endNumber) {
+      return { token, kind: "copy", key: "quickLookupOutOfRange" };
+    }
+
+    return {
+      token,
+      kind: "index",
+      value: lookupNumber - state.lastRange.startNumber + 1
+    };
   });
+
+  setQuickLookupResult(results);
 }
 
 function rerenderForViewport() {
