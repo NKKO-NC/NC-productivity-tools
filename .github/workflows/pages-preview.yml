@@ -53,7 +53,7 @@ jobs:
 
       - name: Compose deployment artifact
         run: |
-          node scripts/compose-pages.mjs \
+          node site-current/scripts/compose-pages.mjs \
             --currentRef=${{ github.ref_name }} \
             --previewBranch=${{ env.PREVIEW_BRANCH }} \
             --currentDir=site-current \
