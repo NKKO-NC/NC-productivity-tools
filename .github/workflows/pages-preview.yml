@@ -1,0 +1,78 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches:
+      - main
+      - engineering-preview
+      - preview-*
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_BRANCH: engineering-preview
+    steps:
+      - name: Checkout current ref
+        uses: actions/checkout@v4
+        with:
+          path: site-current
+
+      - name: Checkout main
+        if: github.ref_name != 'main'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site-main
+
+      - name: Checkout stable preview branch
+        if: github.ref_name == 'main'
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: engineering-preview
+          path: site-preview
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Compose deployment artifact
+        run: |
+          node scripts/compose-pages.mjs \
+            --currentRef=${{ github.ref_name }} \
+            --previewBranch=${{ env.PREVIEW_BRANCH }} \
+            --currentDir=site-current \
+            --mainDir=site-main \
+            --stablePreviewDir=site-preview \
+            --outDir=_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
