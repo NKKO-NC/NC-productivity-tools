@@ -126,13 +126,29 @@ body {
 }
 
 body.preview-lab {
+  position: relative;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     radial-gradient(circle at top left, var(--bg-glow-a), transparent 28%),
     radial-gradient(circle at right 20%, var(--bg-glow-b), transparent 24%),
     linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
-  background-size: 24px 24px, 24px 24px, auto, auto, auto;
+}
+
+body.preview-lab::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 140px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(123, 226, 203, 0.75), transparent);
+  box-shadow: 0 0 18px rgba(75, 180, 255, 0.24);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.preview-lab .page-shell {
+  position: relative;
+  z-index: 1;
 }
 
 body.preview-lab .tool-section,
