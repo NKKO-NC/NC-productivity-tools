@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excel 相對欄位對照</title>
-  <meta name="theme-color" content="#b96a1d" />
-  <meta name="description" content="Excel 相對欄位對照工具，可將欄位區間轉成從 1 開始的相對序號，並可獨立安裝成 PWA。" />
+  <title>Excel 相對欄位對照 預覽版</title>
+  <meta name="theme-color" content="#4bb4ff" />
+  <meta name="description" content="Excel 相對欄位對照工具的預覽版 PWA，供開發與測試使用。" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="../../assets/icons/app-icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../../assets/css/site.css" />
 </head>
-<body>
+<body class="preview-lab">
   <div class="page-shell tool-page">
     <header class="topbar">
       <div class="brand" data-i18n="brand">Excel 工具</div>
       <div class="topbar-actions">
-        <a class="link-button button-soft" href="../../index.html" data-i18n="backHome">回到首頁</a>
+        <a class="link-button button-soft" href="../../index.html">回到首頁</a>
+        <a class="link-button button-soft" href="../../tools/excel-column-helper/index.html">正式版</a>
         <button class="button button-primary pwa-install" type="button" data-install-pwa data-i18n="installPwa" hidden>安裝 App</button>
         <button class="button button-soft" type="button" data-language-toggle>EN</button>
         <div class="theme-switcher" id="themeSwitcher">
@@ -46,17 +47,16 @@
     </header>
 
     <main class="tool-section">
-      <div class="eyebrow" data-i18n="eyebrow">Excel 小工具</div>
+      <div class="eyebrow">Preview Lab</div>
       <h1 data-i18n="title">Excel 相對欄位對照</h1>
       <p class="tool-intro" data-i18n-html="intro">
         輸入起始與結束欄位，例如 <strong>W</strong> 到 <strong>Z</strong>，工具會回傳範圍內從 1 開始的相對序號。
       </p>
+      <p class="limit-note">測試版入口，僅供分支驗證與 PWA 安裝測試。</p>
       <div class="tool-tag-row">
+        <span class="tag-pill">#Preview</span>
         <span class="tag-pill">#PWA</span>
-        <span class="tag-pill">#HTML</span>
-        <span class="tag-pill">#VanillaJS</span>
-        <span class="tag-pill">#Excel</span>
-        <span class="tag-pill">#Offline</span>
+        <span class="tag-pill">#Engineering</span>
       </div>
 
       <div class="form-grid">
@@ -100,7 +100,7 @@
   </div>
 
   <script src="../../assets/js/i18n.js"></script>
-  <script src="./app.js"></script>
+  <script src="../../tools/excel-column-helper/app.js"></script>
   <script src="../../assets/js/pwa.js" data-sw="./sw.js"></script>
 </body>
 </html>

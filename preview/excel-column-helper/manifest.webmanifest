@@ -1,0 +1,21 @@
+{
+  "name": "Excel 相對欄位對照 預覽版",
+  "short_name": "Excel 預覽",
+  "description": "Excel 相對欄位對照工具的預覽版 PWA。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f2033",
+  "theme_color": "#4bb4ff",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "../../assets/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
