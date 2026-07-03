@@ -28,3 +28,8 @@ GitHub Pages does not provide a public same-repo branch preview deployment flow 
 - `engineering-preview` stays reviewable and can still refresh the public `/preview/` area through a `main` workflow dispatch.
 
 This keeps production and preview available on the same Pages site without splitting into multiple repositories.
+
+## Handoff Rule
+
+When a preview build is ready, send the review links directly instead of asking the reviewer to locate them manually.
+See [preview-delivery-checklist.md](./preview-delivery-checklist.md).
