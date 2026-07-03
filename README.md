@@ -1,5 +1,7 @@
 # NC 生產力工具站
 
+- 預覽交付規則 / Preview delivery: [PREVIEW-DELIVERY.md](./PREVIEW-DELIVERY.md)
+
 一個收錄輕量實用工具的公開倉庫，主打直接開啟、快速使用，以及手機與桌機都能安裝成 PWA。
 
 NC Productivity Tools is a public collection of lightweight utilities designed for quick browser use and optional PWA installation.

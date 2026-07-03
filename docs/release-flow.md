@@ -32,4 +32,4 @@ This keeps production and preview available on the same Pages site without split
 ## Handoff Rule
 
 When a preview build is ready, send the review links directly instead of asking the reviewer to locate them manually.
-See [preview-delivery-checklist.md](./preview-delivery-checklist.md).
+See [PREVIEW-DELIVERY.md](../PREVIEW-DELIVERY.md).
