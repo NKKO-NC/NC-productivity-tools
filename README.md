@@ -1,6 +1,12 @@
 # NC 生產力工具站
 
+## 快速入口 / Quick Links
+
+- 正式站 / Production: https://nkko-nc.github.io/NC-productivity-tools/
+- 預覽站 / Preview: https://nkko-nc.github.io/NC-productivity-tools/preview/excel-column-helper/
+- Actions: https://github.com/NKKO-NC/NC-productivity-tools/actions
 - 預覽交付規則 / Preview delivery: [PREVIEW-DELIVERY.md](./PREVIEW-DELIVERY.md)
+- 發布流程 / Release flow: [docs/release-flow.md](./docs/release-flow.md)
 
 一個收錄輕量實用工具的公開倉庫，主打直接開啟、快速使用，以及手機與桌機都能安裝成 PWA。
 
