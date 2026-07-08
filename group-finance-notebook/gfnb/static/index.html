@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>集團財務圖像筆記本</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="title-block">
+          <h1>集團財務圖像筆記本</h1>
+          <p>Phase 1 MVP: 本機 SQLite、as-of date、投資架構圖、匯入預覽、匯出。</p>
+        </div>
+        <div class="toolbar">
+          <label>
+            As-of Date
+            <input id="asOfDate" type="date">
+          </label>
+          <label>
+            搜尋
+            <input id="searchInput" type="search" placeholder="輸入代碼、簡稱或全稱">
+          </label>
+          <button id="exportCsvButton" type="button">匯出 CSV</button>
+          <button id="exportTxtButton" type="button">匯出 TXT Schema</button>
+          <button id="exportDbButton" type="button">匯出 DB</button>
+          <button id="resetDemoButton" type="button" class="secondary">重設 Demo</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="panel panel-left">
+          <section class="card stats-card">
+            <h2>資料總覽</h2>
+            <div id="statsGrid" class="stats-grid"></div>
+          </section>
+
+          <section class="card search-card">
+            <h2>搜尋結果</h2>
+            <div id="searchResults" class="search-results empty">輸入關鍵字後顯示結果。</div>
+          </section>
+
+          <section class="card import-card">
+            <h2>Excel 貼上匯入</h2>
+            <p class="muted">支援 tab 分隔資料。可貼公司主檔，或貼母/子公司投資關係表。</p>
+            <textarea id="importText" rows="10" placeholder="例如：&#10;母公司代碼	母公司簡稱	子公司代碼	子公司簡稱	持股比例	變更日期&#10;A001	Alpha Holding	B001	Beta Tech	80%	2026-06-30"></textarea>
+            <div class="button-row">
+              <button id="previewImportButton" type="button">預覽匯入</button>
+              <button id="applyImportButton" type="button" class="primary">套用匯入</button>
+            </div>
+            <div id="importPreview" class="import-preview empty">尚未建立預覽。</div>
+          </section>
+        </aside>
+
+        <section class="canvas-panel">
+          <div class="canvas-toolbar">
+            <div class="legend">
+              <span class="legend-dot tw"></span>台灣
+              <span class="legend-dot cn"></span>中國
+              <span class="legend-dot sg"></span>新加坡
+              <span class="legend-dot hk"></span>香港
+            </div>
+            <label>
+              Zoom
+              <input id="zoomRange" type="range" min="0.6" max="1.6" step="0.1" value="1">
+            </label>
+          </div>
+          <div id="graphViewport" class="graph-viewport">
+            <div id="graphStage" class="graph-stage">
+              <svg id="edgeLayer" class="edge-layer"></svg>
+              <div id="nodeLayer" class="node-layer"></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel panel-right">
+          <section class="card detail-card">
+            <h2>明細</h2>
+            <div id="detailPanel" class="detail-panel empty">點選公司卡或投資線後，在這裡查看資料與版本歷史。</div>
+          </section>
+
+          <section class="card form-card">
+            <h2>新增 / 更新公司</h2>
+            <form id="companyForm">
+              <input type="hidden" name="company_id">
+              <label>有效起日<input name="valid_from" type="date" required></label>
+              <label>公司代碼<input name="company_code" type="text"></label>
+              <label>公司簡稱<input name="short_name" type="text"></label>
+              <label>公司全稱<input name="full_name" type="text"></label>
+              <label>主營項目<input name="main_business" type="text"></label>
+              <label>代號<input name="symbol_code" type="text"></label>
+              <label>所在地區<input name="region" type="text"></label>
+              <label>使用幣別<input name="currency" type="text"></label>
+              <label>備註<textarea name="note" rows="3"></textarea></label>
+              <button type="submit" class="primary">寫入公司版本</button>
+            </form>
+          </section>
+
+          <section class="card form-card">
+            <h2>新增投資關係</h2>
+            <form id="edgeForm">
+              <label>變更日期<input name="change_date" type="date" required></label>
+              <label>母公司 ID<input name="parent_company_id" type="text" required></label>
+              <label>子公司 ID<input name="child_company_id" type="text" required></label>
+              <label>持股比<input name="ownership_pct" type="text" placeholder="80% 或 0.8"></label>
+              <label>投資股數<input name="investment_shares" type="number" step="any"></label>
+              <label>子公司總股數<input name="child_total_shares" type="number" step="any"></label>
+              <label>備註<textarea name="note" rows="2"></textarea></label>
+              <button type="submit" class="primary">寫入投資版本</button>
+            </form>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
